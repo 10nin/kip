@@ -8,7 +8,7 @@
 (defn get-latest-ticket-no []
   0)
 
-(defn get-ticket-by-no
+(defn get-ticket-by-nofn [a] (or (i
   ([ticket-no ticket-list]
    (when (first @ticket-list)
      (if (= (:no (first ticket-list)) ticket-no) (first ticket-list)
