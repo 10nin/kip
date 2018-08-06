@@ -21,3 +21,6 @@
 
 (defn make-ticket [person subject detail]
   (->Ticket (get-latest-ticket-no) 0 person subject detail))
+
+(defn add-ticket [t]
+  (swap! tickets conj t))
