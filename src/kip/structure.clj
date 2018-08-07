@@ -1,9 +1,15 @@
 (ns kip.structure)
 
-; master-ticket-list
 (defrecord Account [id, account-name, e-mail])
 (defrecord Ticket [no, status, person, subject, detail])
-(defonce tickets (atom nil :validator (fn [a] (or (instance? Ticket a) (nil? a)))))
+; master-ticket-list
+(defonce tickets (atom nil))
+
+(defn ticket? [t]
+  "Ticket is must need assinged account and subject"
+  (and (instance? Ticket t)
+       (instance? Account (:person t))
+       (< 0 (count (:subject t)))))
 
 (defn get-latest-ticket-no []
   0)
@@ -29,4 +35,4 @@
   (->Ticket (get-latest-ticket-no) 0 person subject detail))
 
 (defn add-ticket [t]
-  (swap! tickets conj t))
+  (if (ticket? t) (swap! tickets conj t)))
