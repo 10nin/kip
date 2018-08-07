@@ -12,7 +12,7 @@
   ([ticket-no ticket-list]
    (when (first @ticket-list)
      (if (= (:no (first ticket-list)) ticket-no) (first ticket-list)
-         (get-ticket-by-no [ticket-no (rest ticket-list)]))))
+         (recur ticket-no (rest ticket-list)))))
   ([ticket-no]
    (get-ticket-by-no ticket-no @tickets)))
 
@@ -21,7 +21,7 @@
    (when (instance? Account a)
      (if (= a (:person (first ticket-list)))
        (first ticket-list)
-       (find-tickets-by-account a (rest ticket-list)))))
+       (recur a (rest ticket-list)))))
    ([a]
     (find-tickets-by-account a @tickets)))
 
