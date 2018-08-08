@@ -2,13 +2,19 @@
 
 (defrecord Account [id, account-name, e-mail])
 (defrecord Ticket [no, status, person, subject, detail])
+
 ; master-ticket-list
 (defonce tickets (atom nil))
-(defonce last-ticket-index (atom 0))
+(defonce last-ticket-no (atom 0))
+
+(def get-id []
+  "generate id for new Account"
+  "000000000")
 
 (defn clear-ticket-list []
+  "reset ticket list and last no"
   (reset! tickets nil)
-  (reset! last-ticket-index 0))
+  (reset! last-ticket-no 0))
 
 (defn ticket? [t]
   "Ticket is must need assinged account and subject"
@@ -17,6 +23,7 @@
        (< 0 (count (:subject t)))))
 
 (defn get-ticket-by-no
+  "find ticket in ticket list by ticket no. if can't find a ticket then return nil."
   ([ticket-no ticket-list]
    (when (first @ticket-list)
      (if (= (:no (first ticket-list)) ticket-no) (first ticket-list)
@@ -25,6 +32,7 @@
    (get-ticket-by-no ticket-no @tickets)))
 
 (defn find-tickets-by-account
+  "find ticket in ticket list by assigned account. if can't find a ticket then return nil."
   ([a ticket-list]
    (when (instance? Account a)
      (if (= a (:person (first ticket-list)))
@@ -34,9 +42,11 @@
     (find-tickets-by-account a @tickets)))
 
 (defn make-ticket [person subject detail]
-  (->Ticket @last-ticket-index 0 person subject detail))
+  "create new ticket"
+  (->Ticket @last-ticket-no 0 person subject detail))
 
 (defn add-ticket [t]
+  "add ticket 't' to ticket list. if invalidate t then return nil and don't add to ticket list."
   (when (ticket? t)
     (swap! tickets conj t)
-    (reset! last-ticket-index (+ @last-ticket-index 1))))
+    (reset! last-ticket-no (+ @last-ticket-no 1))))
