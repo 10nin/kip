@@ -4,10 +4,10 @@
 (defrecord Ticket [no, status, person, subject, detail])
 
 ; master-ticket-list
-(defonce tickets (atom nil))
-(defonce last-ticket-no (atom 0))
+(def tickets (atom nil))
+(def last-ticket-no (atom 0))
 
-(def get-id []
+(defn get-id []
   "generate id for new Account"
   "000000000")
 
@@ -25,7 +25,7 @@
 (defn get-ticket-by-no
   "find ticket in ticket list by ticket no. if can't find a ticket then return nil."
   ([ticket-no ticket-list]
-   (when (first @ticket-list)
+   (when (first ticket-list)
      (if (= (:no (first ticket-list)) ticket-no) (first ticket-list)
          (recur ticket-no (rest ticket-list)))))
   ([ticket-no]
@@ -40,6 +40,9 @@
        (recur a (rest ticket-list)))))
    ([a]
     (find-tickets-by-account a @tickets)))
+
+(defn remove-ticket-by-no [n]
+  (reset! tickets (remove (get-ticket-by-no n) @tickets)))
 
 (defn make-ticket [person subject detail]
   "create new ticket"
