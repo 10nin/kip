@@ -32,7 +32,8 @@
    (get-ticket-by-no ticket-no @tickets)))
 
 (defn find-tickets-by-account
-  "find ticket in ticket list by assigned account. if can't find a ticket then return nil."
+  "find ticket list in ticket list by assigned account. if can't find a ticket then return nil."
+  "TODO: make return value *TICKET LIST* not a ticket."
   ([a ticket-list]
    (when (instance? Account a)
      (if (= a (:person (first ticket-list)))

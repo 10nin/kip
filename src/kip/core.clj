@@ -1,5 +1,6 @@
 (ns kip.core
-  (:require [ring.adapter.jetty :as s]))
+  (:require [ring.adapter.jetty :as s]
+            [kip.structure :as kst]))
 
 (defonce server (atom nil))
 
