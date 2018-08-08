@@ -3,7 +3,7 @@
 (defrecord Account [id, account-name, e-mail])
 (defrecord Ticket [no, status, person, subject, detail])
 
-; master-ticket-list
+; master-ticket-list and last index
 (def tickets (atom nil))
 (def last-ticket-no (atom 0))
 
@@ -28,7 +28,7 @@
    (when (first ticket-list)
      (if (= (:no (first ticket-list)) ticket-no) (first ticket-list)
          (recur ticket-no (rest ticket-list)))))
-  ([ticket-no]
+  ([ticket-no] ;for outer interface
    (get-ticket-by-no ticket-no @tickets)))
 
 (defn find-tickets-by-account
@@ -38,10 +38,11 @@
      (if (= a (:person (first ticket-list)))
        (first ticket-list)
        (recur a (rest ticket-list)))))
-   ([a]
+   ([a] ;for outer interface
     (find-tickets-by-account a @tickets)))
 
 (defn remove-ticket-by-no [n]
+  "remove ticket in ticket list by ticket 'no'"
   (reset! tickets (remove (get-ticket-by-no n) @tickets)))
 
 (defn make-ticket [person subject detail]
