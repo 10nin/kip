@@ -5,16 +5,20 @@
 
 ; master-ticket-list and last index
 (def tickets (atom nil))
-(def last-ticket-no (atom 0))
+(def latest-ticket-no (ref 0))
+(def latest-account-id (ref 0))
 
 (defn get-id []
   "generate id for new Account"
-  "000000000")
+  (dosync
+   (ref-set latest-account-id (+ 1 @latest-account-id))))
 
 (defn clear-ticket-list []
   "reset ticket list and last no"
-  (reset! tickets nil)
-  (reset! last-ticket-no 0))
+  (dosync 
+   (reset! tickets nil)
+   (reset! latest-ticket-no 0)
+   (reset! latest-account-id 0)))
 
 (defn ticket? [t]
   "Ticket is must need assinged account and subject"
@@ -44,13 +48,14 @@
 
 (defn make-ticket [person subject detail]
   "create new ticket"
-  (->Ticket @last-ticket-no 0 person subject detail))
+  (->Ticket @latest-ticket-no 0 person subject detail))
 
 (defn add-ticket [t]
   "add ticket 't' to ticket list. if invalidate t then return nil and don't add to ticket list."
   (when (ticket? t)
-    (swap! tickets conj t)
-    (reset! last-ticket-no (+ @last-ticket-no 1))))
+    (dosync
+     (swap! tickets conj t)
+     (reset! latest-ticket-no (+ @latest-ticket-no 1)))))
 
 (defn ticket-to-summary [t]
   {:no (:no t)
