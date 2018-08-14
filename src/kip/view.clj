@@ -10,3 +10,8 @@ ticket-summary contains {ticket-no, ticket-status, assined-account-name, ticket-
 
 (defn make-summary-html-table [ticket-summary]
   (hc/html (gen-summary-table ticket-summary)))
+
+(defn make-summary-html-list [ticket-summary]
+  (-> '([:ul
+         ~@(for [s ticket-summary] [:li (:subject s)])])
+      (hc/html)))
