@@ -55,3 +55,12 @@
   (when (ticket? t)
     (swap! tickets conj t)
     (reset! last-ticket-no (+ @last-ticket-no 1))))
+
+(defn ticket-to-summary [t]
+  {:no (:no t)
+   :status (:status t)
+   :assign (:account-name (:person t))
+   :subject (:subject t)})
+
+(defn ticket-list-to-summary [ticket-list]
+  (map ticket-to-summary ticket-list))
