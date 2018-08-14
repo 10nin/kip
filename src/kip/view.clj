@@ -1,6 +1,5 @@
 (ns kip.view
-  (:require [kip.structure :as kst]
-            [hiccup.core :as hc]
+  (:require [hiccup.core :as hc]
             [hiccup.table :as ht]))
 
 (defn gen-summary-table [ticket-summary]
