@@ -33,14 +33,10 @@
 
 (defn find-tickets-by-account
   "find ticket list in ticket list by assigned account. if can't find a ticket then return nil."
-  ;;"TODO: make return value *TICKET LIST* not a ticket."
   ([a ticket-list]
-   (when (instance? Account a)
-     (if (= a (:person (first ticket-list)))
-       (first ticket-list)
-       (recur a (rest ticket-list)))))
-   ([a] ;for outer interface
-    (find-tickets-by-account a @tickets)))
+   (filter #((and (instance? Account a) (= a (:person (first %))))) ticket-list))
+  ([a] ;for outer interface
+   (find-tickets-by-account a @tickets)))
 
 (defn remove-ticket-by-no [n]
   "remove ticket in ticket list by ticket 'no'"
