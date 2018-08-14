@@ -5,13 +5,13 @@
 
 ; master-ticket-list and last index
 (def tickets (atom nil))
-(def latest-ticket-no (ref 0))
-(def latest-account-id (ref 0))
+(def latest-ticket-no (atom 0))
+(def latest-account-id (atom 0))
 
 (defn get-id []
   "generate id for new Account"
   (dosync
-   (ref-set latest-account-id (+ 1 @latest-account-id))))
+   (reset! latest-account-id (+ 1 @latest-account-id))))
 
 (defn clear-ticket-list []
   "reset ticket list and last no"
